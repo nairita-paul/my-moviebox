@@ -10,7 +10,7 @@
 ul {
   list-style-type: none;
 }
-.input-btn {
+button {
   margin-left: 10px;
   padding: 10px;
   font-weight: 600px;
@@ -19,4 +19,27 @@ ul {
   width: 200px;
   height: 200px;
   object-fit: cover;
+}
+.saved-btn {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+}
+.unsaved-btn {
+  background-color: grey;
+  border: none;
+  color: white;
+}
+
+.card {
+  border-radius: 5px;
+  border: 2px solid gray;
+  margin-bottom: 5px;
+  padding: 10px;
+}
+
+.favorite {
+  background: #ff4757;
+  color: white;
+  border: none;
 }

@@ -1,33 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
-import img1 from "./assets/pic1.jpg";
-// import Input from "./Input";
-function inputBtnClick() {}
+import data from "./data.json";
 
 function App() {
+  const [input, setInput] = React.useState("");
+
+  const [favMovieArr, setFavMovieArr] = useState(
+    JSON.parse(localStorage.getItem("movieArr")) || []
+  );
+
+  function handleAddFav(movieInfo) {
+    if (!isFavorite(movieInfo.imdbID)) {
+      addFavMovie(movieInfo);
+    } else {
+      removeFavMovie(movieInfo.imdbID);
+    }
+    localStorage.setItem("movieArr", JSON.stringify(favMovieArr));
+  }
+
+  function addFavMovie(movieInfo) {
+    setFavMovieArr((prevFavMovieArr) => {
+      return [...prevFavMovieArr, movieInfo];
+    });
+  }
+  function removeFavMovie(id) {
+    setFavMovieArr((prevFavMovieArr) => {
+      return prevFavMovieArr.filter((favMovie) => favMovie.imdbID != id);
+    });
+  }
+
+  function handleChange(event) {
+    setInput(event.target.value);
+  }
+
+  function isFavorite(id) {
+    for (let i = 0; i < favMovieArr.length; i++) {
+      if (favMovieArr[i].imdbID === id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   return (
     <main>
       <input
         className="inputField"
         type="text"
         placeholder="Enter your favourite movie !"
+        value={input}
+        onChange={handleChange}
       />
-      <button className="input-btn" onClick={inputBtnClick}>
-        Search here
-      </button>
+      <button className="search-btn">Search here</button>
       <ul>
-        <li>
-          <img src={img1} alt="fav-movie" className="movie-poster-img"></img>
-          <p>Title : Adventour of life</p>
-          <p>Genre : Travel</p>
-          <p>Director : A K Thomson</p>
-        </li>
-        <li>
-          <img src={img1} alt="fav-movie" className="movie-poster-img"></img>
-          <p>Title : Journey of Life</p>
-          <p>Genre : Travel</p>
-          <p>Director : A K Thomson</p>
-        </li>
+        {data.map((movieInfo) => {
+          return (
+            <li key={movieInfo.imdbID} className="card">
+              <img src={movieInfo.Poster} className="movie-poster-img"></img>
+              <div className="poster-info">
+                <p>Ttile: {movieInfo.Title}</p>
+                <p>Genre: {movieInfo.Genre}</p>
+                <p>Director: {movieInfo.Director}</p>
+              </div>
+              <button
+                className={isFavorite(movieInfo.imdbID) ? "favorite" : ""}
+                onClick={() => handleAddFav(movieInfo)}
+              >
+                Add To Favorites
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </main>
   );
