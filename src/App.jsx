@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import "./App.css";
-import data from "./data.json";
 
 function App() {
   const [input, setInput] = React.useState("");
@@ -9,6 +8,8 @@ function App() {
   const [favMovieArr, setFavMovieArr] = useState(
     JSON.parse(localStorage.getItem("movieArr")) || []
   );
+
+  const [data, setData] = React.useState({ Search: [] });
 
   useEffect(() => {
     localStorage.setItem("movieArr", JSON.stringify(favMovieArr));
@@ -45,6 +46,17 @@ function App() {
     }
     return false;
   }
+  function fetchAPI() {
+    fetch(
+      `http://www.omdbapi.com/?s=${input}&apikey=${
+        import.meta.env.VITE_OMDBAPIKEY
+      }&page=1`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+      });
+  }
 
   return (
     <main>
@@ -56,16 +68,18 @@ function App() {
         value={input}
         onChange={handleChange}
       />
-      <button className="search-btn">Search here</button>
+      <button className="search-btn" onClick={fetchAPI}>
+        Search here
+      </button>
       <ul>
-        {data.map((movieInfo) => {
+        {data.Search.map((movieInfo) => {
           return (
             <li key={movieInfo.imdbID} className="card">
               <img src={movieInfo.Poster} className="movie-poster-img"></img>
               <div className="poster-info">
-                <p>Ttile: {movieInfo.Title}</p>
-                <p>Genre: {movieInfo.Genre}</p>
-                <p>Director: {movieInfo.Director}</p>
+                <p>Title: {movieInfo.Title}</p>
+                <p>Year: {movieInfo.Year}</p>
+                <p>Type: {movieInfo.Type}</p>
               </div>
               <button
                 className={isFavorite(movieInfo.imdbID) ? "favorite" : ""}
