@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Navbar from "./Navbar";
 import "./App.css";
 import data from "./data.json";
 
@@ -47,6 +48,7 @@ function App() {
 
   return (
     <main>
+      <Navbar />
       <input
         className="inputField"
         type="text"
