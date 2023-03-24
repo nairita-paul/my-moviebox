@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import data from "./data.json";
 
@@ -9,13 +9,16 @@ function App() {
     JSON.parse(localStorage.getItem("movieArr")) || []
   );
 
+  useEffect(() => {
+    localStorage.setItem("movieArr", JSON.stringify(favMovieArr));
+  }, [favMovieArr]);
+
   function handleAddFav(movieInfo) {
     if (!isFavorite(movieInfo.imdbID)) {
       addFavMovie(movieInfo);
     } else {
       removeFavMovie(movieInfo.imdbID);
     }
-    localStorage.setItem("movieArr", JSON.stringify(favMovieArr));
   }
 
   function addFavMovie(movieInfo) {
