@@ -2,7 +2,7 @@ import React from "react";
 function Navbar() {
   return (
     <nav>
-      <ul>
+      <ul className="flex">
         <li>
           <a href="/">Home</a>
         </li>
